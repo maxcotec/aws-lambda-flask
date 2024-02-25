@@ -1,0 +1,34 @@
+service: flask-lambdas-youtube
+
+frameworkVersion: '3'
+
+package:
+  individually: true
+  exclude:
+    - .venv/**
+    - node_modules/**
+
+provider:
+  name: aws
+  region: eu-west-1
+  stage: dev
+  environment:
+    STRIP_STAGE_PATH: yes
+  runtime: python3.9
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - httpApi: '*'
+
+custom:
+  wsgi:
+    app: app.app
+  pythonRequirements:
+    zip: true
+    slim: true
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
